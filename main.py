@@ -22,13 +22,33 @@ class PluginManager:
                 #print(f'\n Module Name: module_name')
         return self.plugins
 
+    def show_plugins(self):
+        print("\n" + "=" * 50)
+        print(f"\nShowing {len(self.plugins)} plugins:")
+        print("\n" + "=" * 50)
+        
+        for plugin in self.plugins:
+            if hasattr(plugin, 'get_info'):
+                info = plugin.get_info()
+                print(f'{plugin.__name__}:{info}')
+            else:
+                print(f'{plugin.__name__}')
+
+
+
 manager = PluginManager('./plugins')
 manager.load_plugins()
-print(f'\n============================================================================')
-print(f'\nLoaded {len(manager.plugins)} plugins.')
+manager.show_plugins()
+
+print("\n" + "=" * 50)
+print("Testing Plugins:")
+print("=" * 50)
+
 for plugin in manager.plugins:
-    print(f'{plugin.__name__}')
-        
+    if hasattr(plugin,'send'):
+        plugin.send('Test Message')
+    if hasattr(plugin, 'log'):
+        plugin.log('Test Mesage')
 
 
 
